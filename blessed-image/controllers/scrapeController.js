@@ -8,27 +8,12 @@ export const scrapeController = router.get("/", async (_req, res) => {
     const page = await browser.newPage();
     
     await page.goto('https://developer.chrome.com/');
-    
-    // Set screen size
-    await page.setViewport({width: 1080, height: 1024});
-    
-    // Type into search box
-    await page.type('.search-box__input', 'automate beyond recorder');
-    
-    // Wait and click on first result
-    const searchResultSelector = '.search-box__link';
-    await page.waitForSelector(searchResultSelector);
-    await page.click(searchResultSelector);
-    
-    // Locate the full title with a unique string
-    const textSelector = await page.waitForSelector(
-    'text/Customize and automate'
-    );
-    const fullTitle = await textSelector.evaluate(el => el.textContent);
+
+    const title = await page.title();
     
     // Print the full title
-    console.log('The title of this blog post is "%s".', fullTitle);
+    console.log('The title of this blog post is "%s".', title);
     await browser.close();
-    res.json({ msg: fullTitle })
+    res.json({ msg: title })
 })
 
